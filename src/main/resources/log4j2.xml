@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" packages="hcmute.nhom.kltn">
+    <Properties>
+        <Property name="LOG_PATTERN_PORTAL">[%d{yyyy-MM-dd'T'HH:mm:ss.SSS}][${hostName}][%p][%tid][%X{SID}][%X{account}][%X{ScreenId}][%M] %spi [%C](%L)%n</Property>
+        <Property name="LOG_PATTERN_SYSTEM">[%d{yyyy-MM-dd'T'HH:mm:ss.SSS}][${hostName}][%p][%tid][%X{SID}][%X{account}] %spi [%C(%L)]%n</Property>
+        <Property name="LOG_PATTERN_FLOWER">[%d{yyyy-MM-dd'T'HH:mm:ss.SSS}][${hostName}][%p][%tid][%X{taskId}][%X{account}] %spi [%C(%L)]%n</Property>
+        <Property name="LOG_PATTERN_CACHE">[%d{yyyy-MM-dd'T'HH:mm:ss.SSS}][${hostName}][%t] %-5level %logger{36} - %msg%n]</Property>
+<!--        <Property name="logPortalPath">/opt/tomcat/logs/bpr_logs/portal</Property>-->
+<!--        <Property name="logSystemPath">/opt/tomcat/logs/bpr_logs/system</Property>-->
+<!--        <Property name="logFlowerPath">/opt/tomcat/logs/bpr_logs/flower</Property>-->
+        <Property name="portal">Portal</Property>
+        <Property name="system">System</Property>
+    </Properties>
+</Configuration>

@@ -12,7 +12,7 @@ import hcmute.nhom.kltn.model.AbstractModel;
  * @function_id:
  * @version:
  **/
-public interface AbstractMapper <D extends AbstractNonAuditDTO, E extends AbstractModel> {
+public interface AbstractMapper<D extends AbstractNonAuditDTO, E extends AbstractModel> {
     E toEntity(D dto, @Context CycleAvoidingMappingContext context);
 
     D toDto(E entity, @Context CycleAvoidingMappingContext context);

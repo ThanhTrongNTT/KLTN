@@ -11,6 +11,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Class Address.
+ * Create by: IntelliJ IDEA
+ *
+ * @author : ThanhTrong
+ **/
 @Entity
 @Table(name = "T_ADDRESS")
 @Getter
@@ -33,5 +39,5 @@ public class Address extends AbstractAuditModel implements java.io.Serializable 
     @Column(name = "POSTAL_CODE")
     private String postalCode;
     @Column(name = "REMOVAL_FLAG", nullable = false, length = 1)
-    private Boolean removalFlag;
+    private Boolean removalFlag  = false;
 }

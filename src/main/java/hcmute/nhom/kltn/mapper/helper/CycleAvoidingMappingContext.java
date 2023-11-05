@@ -14,7 +14,7 @@ import org.mapstruct.TargetType;
  * @version:
  **/
 public class CycleAvoidingMappingContext {
-    private Map<Object, Object> knownInstances = new IdentityHashMap<Object, Object>();
+    private final Map<Object, Object> knownInstances = new IdentityHashMap<>();
 
     @SuppressWarnings("unchecked")
     @BeforeMapping

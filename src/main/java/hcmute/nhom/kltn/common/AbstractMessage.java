@@ -35,6 +35,12 @@ public class AbstractMessage implements MessageSourceAware {
         return getMessage(code, null);
     }
 
+    /**
+     * Get message from message source.
+     * @param code message code
+     * @param args message arguments
+     * @return message
+     */
     public String getMessage(String code, Object[] args) {
         try {
             return this.messageSource.getMessage(code, args, Locale.US);
@@ -57,6 +63,13 @@ public class AbstractMessage implements MessageSourceAware {
         return getMessage("common.input.parameter", new String[] {blNo, param, Utilities.parseString(value)});
     }
 
+    /**
+     * Get message output parameter.
+     * @param blNo business logic number
+     * @param param parameter name
+     * @param value parameter value
+     * @return
+     */
     public String getMessageOutputParam(String blNo, String param, Object value) {
         if (Objects.nonNull(value)) {
             if (value instanceof List) {

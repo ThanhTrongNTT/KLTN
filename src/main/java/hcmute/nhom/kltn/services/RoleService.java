@@ -12,5 +12,6 @@ import hcmute.nhom.kltn.model.Role;
  **/
 public interface RoleService extends AbstractService<RoleDTO, Role> {
     RoleDTO findByRoleName(String roleName);
+
     Role findByName(String roleName);
 }

@@ -19,11 +19,13 @@ import hcmute.nhom.kltn.services.RoleService;
  * @version:
  **/
 @Service
-public class RoleServiceImpl extends AbstractServiceImpl<RoleRepository, RoleMapper, RoleDTO, Role> implements RoleService {
+public class RoleServiceImpl extends AbstractServiceImpl<RoleRepository, RoleMapper, RoleDTO, Role>
+        implements RoleService {
     private static final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
-    private final String SERVICE_NAME = "RoleServiceImpl";
+    private static final String SERVICE_NAME = "RoleServiceImpl";
     @Autowired
     private RoleRepository roleRepository;
+
     @Override
     public RoleDTO findByRoleName(String roleName) {
         logger.info(getMessageStart(SERVICE_NAME, "findByRoleName"));
@@ -44,7 +46,7 @@ public class RoleServiceImpl extends AbstractServiceImpl<RoleRepository, RoleMap
     }
 
     @Override
-    public RoleMapper getMapper(){
+    public RoleMapper getMapper() {
         return RoleMapper.INSTANCE;
     }
 

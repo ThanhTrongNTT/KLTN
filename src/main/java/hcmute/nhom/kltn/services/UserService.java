@@ -10,7 +10,9 @@ import hcmute.nhom.kltn.model.User;
  * @function_id:
  * @version:
  **/
-public interface UserService extends AbstractService<UserDTO, User>{
+public interface UserService extends AbstractService<UserDTO, User> {
+
     UserDTO saveWithAddress(UserDTO userDTO);
+
     UserDTO findByEmail(String email);
 }

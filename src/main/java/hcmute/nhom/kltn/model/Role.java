@@ -1,24 +1,17 @@
 package  hcmute.nhom.kltn.model;
 
-import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import hcmute.nhom.kltn.enums.RoleName;
 
 /**
  * Class Role.
@@ -32,7 +25,7 @@ import hcmute.nhom.kltn.enums.RoleName;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role extends AbstractAuditModel implements java.io.Serializable{
+public class Role extends AbstractAuditModel implements java.io.Serializable {
     /**
      * Role entity.
      */
@@ -49,5 +42,5 @@ public class Role extends AbstractAuditModel implements java.io.Serializable{
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
     @Column(name = "REMOVAL_FLAG", nullable = false, length = 1)
-    private Boolean removalFlag;
+    private Boolean removalFlag = false;
 }

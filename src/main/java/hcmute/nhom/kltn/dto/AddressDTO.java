@@ -24,7 +24,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddressDTO extends AbstractNonAuditDTO{
+public class AddressDTO extends AbstractNonAuditDTO {
     private static final long serialVersionUID = 1L;
 
     private Long id;

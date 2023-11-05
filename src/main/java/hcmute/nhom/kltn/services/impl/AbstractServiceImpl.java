@@ -3,6 +3,8 @@ package hcmute.nhom.kltn.services.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +14,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import hcmute.nhom.kltn.common.AbstractMessage;
 import hcmute.nhom.kltn.dto.AbstractNonAuditDTO;
+import hcmute.nhom.kltn.exception.SystemErrorException;
 import hcmute.nhom.kltn.mapper.AbstractMapper;
 import hcmute.nhom.kltn.mapper.helper.CycleAvoidingMappingContext;
 import hcmute.nhom.kltn.model.AbstractModel;
@@ -24,7 +27,9 @@ import hcmute.nhom.kltn.services.AbstractService;
  * @function_id:
  * @version:
  **/
-public class AbstractServiceImpl<R extends JpaRepository, M extends AbstractMapper,
+@Getter
+@Setter
+public class AbstractServiceImpl<R extends JpaRepository<E, Long>, M extends AbstractMapper<D, E>,
         D extends AbstractNonAuditDTO, E extends AbstractModel>
         extends AbstractMessage
         implements AbstractService<D, E>, MessageSourceAware {
@@ -33,32 +38,26 @@ public class AbstractServiceImpl<R extends JpaRepository, M extends AbstractMapp
     protected E entity;
     protected M mapper;
     protected MessageSource messageSource;
+
     @Override
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
-    }
-
-    public R getRepository() {
-        return repository;
-    }
-
-    public M getMapper() {
-        return mapper;
     }
 
     public CycleAvoidingMappingContext getCycleAvoidingMappingContext() {
         return new CycleAvoidingMappingContext();
     }
 
-    protected D getDto() {
+    protected D getDto() throws SystemErrorException {
         if (getMapper() == null) {
-            throw new RuntimeException("Can not load Mapper");
+            throw new SystemErrorException("Can not load Mapper");
         }
         return (D) getMapper().toDto(entity, getCycleAvoidingMappingContext());
     }
-    protected E getEntity() {
+
+    protected E getEntity() throws SystemErrorException {
         if (getMapper() == null) {
-            throw new RuntimeException("Can not load Mapper");
+            throw new SystemErrorException("Can not load Mapper");
         }
         return (E) getMapper().toEntity(dto, getCycleAvoidingMappingContext());
     }
@@ -70,67 +69,68 @@ public class AbstractServiceImpl<R extends JpaRepository, M extends AbstractMapp
     public void setEntity(E entity) {
         this.entity = entity;
     }
+
     @Override
     @Transactional
-    public D save(D dto) {
+    public D save(D dto) throws SystemErrorException {
         if (dto == null) {
-            throw new RuntimeException("Save not success. DTO is null");
+            throw new SystemErrorException("Save not success. DTO is null");
         }
 
-        var entity = getMapper().toEntity(dto, getCycleAvoidingMappingContext());
-        entity = (AbstractModel) getRepository().save(entity);
+        E item = getMapper().toEntity(dto, getCycleAvoidingMappingContext());
+        entity = getRepository().save(item);
         return (D) getMapper().toDto(entity, getCycleAvoidingMappingContext());
     }
 
     @Override
     @Transactional
-    public E save(E entity) {
+    public E save(E entity) throws SystemErrorException {
         if (entity == null) {
-            throw new RuntimeException("Save not success. Entity is null");
+            throw new SystemErrorException("Save not success. Entity is null");
         }
         return (E) getRepository().save(entity);
     }
 
     @Override
-    public List<D> save(List<D> dtos) {
-        if (dtos == null) {
-            throw new RuntimeException("Save not success. DTOs is null");
+    public List<D> save(List<D> listDto) throws SystemErrorException {
+        if (listDto == null) {
+            throw new SystemErrorException("Save not success. DTOs is null");
         }
 
         List<E> entities =
-                (List<E>) dtos.stream().map(dto -> mapper.toEntity(dto, getCycleAvoidingMappingContext()))
+                listDto.stream().map(item -> mapper.toEntity(item, getCycleAvoidingMappingContext()))
                         .collect(Collectors.toList());
         entities = getRepository().saveAll(entities);
 
-        return (List<D>) entities.stream()
-                .map(entity -> mapper.toDto(entity, getCycleAvoidingMappingContext()))
+        return entities.stream()
+                .map(item -> mapper.toDto(item, getCycleAvoidingMappingContext()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public D findById(long id) {
+    public D findById(long id) throws SystemErrorException {
         Optional<E> optional = getRepository().findById(id);
         if (optional.isEmpty()) {
-            throw new RuntimeException("Not found entity with id: " + id);
+            throw new SystemErrorException("Not found entity with id: " + id);
         }
         return (D) getMapper().toDto(optional.get(), getCycleAvoidingMappingContext());
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long id) throws SystemErrorException {
         try {
             getRepository().deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("Delete not success. Error: " + e.getMessage());
+            throw new SystemErrorException("Delete not success. Error: " + e.getMessage());
         }
     }
 
     @Override
-    public void delete(D dto) {
+    public void delete(D dto) throws SystemErrorException {
         try {
             getRepository().delete(getMapper().toEntity(dto, getCycleAvoidingMappingContext()));
         } catch (Exception e) {
-            throw new RuntimeException("Delete not success. Error: " + e.getMessage());
+            throw new SystemErrorException("Delete not success. Error: " + e.getMessage());
         }
     }
 
@@ -138,8 +138,8 @@ public class AbstractServiceImpl<R extends JpaRepository, M extends AbstractMapp
     @Transactional
     public List<D> findAll() {
         List<E> list = getRepository().findAll();
-        return (List<D>) list.stream()
-                .map(entity -> getMapper().toDto(entity, getCycleAvoidingMappingContext()))
+        return list.stream()
+                .map(item -> getMapper().toDto(item, getCycleAvoidingMappingContext()))
                 .collect(Collectors.toList());
     }
 

@@ -7,19 +7,26 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * Class AbstractAuditModel.
+ * Create by: IntelliJ IDEA
+ *
+ * @author : ThanhTrong
+ **/
 @MappedSuperclass
-@Data
+@Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
-@EqualsAndHashCode(callSuper = false)
-public abstract class AbstractAuditModel extends AbstractModel{
+public abstract class AbstractAuditModel extends AbstractModel {
+
     private static final long serialVersionUID = 1L;
 
     @CreatedBy

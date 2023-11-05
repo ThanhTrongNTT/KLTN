@@ -35,7 +35,7 @@ import hcmute.nhom.kltn.enums.GenderType;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends AbstractAuditModel implements java.io.Serializable{
+public class User extends AbstractAuditModel implements java.io.Serializable {
 
     /**
      * User entity.
@@ -95,6 +95,6 @@ public class User extends AbstractAuditModel implements java.io.Serializable{
     private Set<Role> roles;
 
     @Column(name = "REMOVAL_FLAG", nullable = false, length = 1)
-    private Boolean removalFlag;
+    private Boolean removalFlag = false;
 
 }

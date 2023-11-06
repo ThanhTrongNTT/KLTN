@@ -1,15 +1,17 @@
 package hcmute.nhom.kltn.model;
 
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 /**
  * Class Address.
@@ -25,9 +27,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Address extends AbstractAuditModel implements java.io.Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ADDRESS_ID", nullable = false)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Type(type = "uuid-char")
+    @Column(name = "ADDRESS_ID", nullable = false, columnDefinition = "uuid")
+    private UUID id;
     @Column(name = "STREET")
     private String street;
     @Column(name = "DISTRICT")

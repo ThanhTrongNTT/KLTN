@@ -1,10 +1,10 @@
 package  hcmute.nhom.kltn.model;
 
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 /**
  * Class Role.
@@ -32,9 +34,11 @@ public class Role extends AbstractAuditModel implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ROLE_ID", nullable = false)
-    private Long roleId;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Type(type = "uuid-char")
+    @Column(name = "ROLE_ID", nullable = false, columnDefinition = "uuid")
+    private UUID roleId;
     @Column(name = "ROLE_NAME")
     private String roleName;
     @Column(name = "ADMIN_FLAG", length = 1, nullable = false)

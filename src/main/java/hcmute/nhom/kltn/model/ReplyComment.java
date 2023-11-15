@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,41 +17,40 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 /**
- * Class Address.
- * Create by: IntelliJ IDEA
+ * Class ReplyComment.
  *
- * @author : ThanhTrong
+ * @author: ThanhTrong
+ * @function_id:
+ * @version:
  **/
 @Entity
-@Table(name = "T_ADDRESS")
-@Getter
+@Table(name = "T_REPLY_COMMENT")
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address extends AbstractAuditModel implements Serializable {
-
-    /**
-     * Address entity.
-     */
-
+public class ReplyComment extends AbstractAuditModel implements Serializable {
     private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Type(type = "uuid-char")
     @Column(name = "ID", nullable = false)
     private UUID id;
-    @Column(name = "STREET")
-    private String street;
-    @Column(name = "DISTRICT")
-    private String district;
-    @Column(name = "CITY")
-    private String city;
-    @Column(name = "COUNTRY")
-    private String country;
-    @Column(name = "POSTAL_CODE")
-    private String postalCode;
+    @ManyToOne
+    @JoinColumn(name = "COMMENT_ID", nullable = false)
+    private Comment comment;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User author;
+    @Column(name = "CONTENT")
+    private String content;
+    @Column(name = "IMAGE")
+    private String image;
+    @Column(name = "VIDEO")
+    private String video;
+    @Column(name = "LIKE_STATUS")
+    private Integer likeStatus;
     @Column(name = "REMOVAL_FLAG", nullable = false, length = 1)
-    private Boolean removalFlag = false;
+    private Integer removalFlag;
 }

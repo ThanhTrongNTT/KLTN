@@ -1,5 +1,6 @@
-package  hcmute.nhom.kltn.model;
+package hcmute.nhom.kltn.model;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -27,17 +28,18 @@ import org.hibernate.annotations.Type;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role extends AbstractAuditModel implements java.io.Serializable {
+public class Role extends AbstractAuditModel implements Serializable {
     /**
      * Role entity.
      */
+
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Type(type = "uuid-char")
-    @Column(name = "ROLE_ID", nullable = false, columnDefinition = "uuid")
+    @Column(name = "ID", nullable = false)
     private UUID roleId;
     @Column(name = "ROLE_NAME")
     private String roleName;

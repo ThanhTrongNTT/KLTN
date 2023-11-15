@@ -35,6 +35,7 @@ public class UserPrincipal implements UserDetails {
 
     /**
      * Constructor.
+     *
      * @param id
      * @param email
      * @param password
@@ -49,6 +50,7 @@ public class UserPrincipal implements UserDetails {
 
     /**
      * Create UserPrincipal.
+     *
      * @param user User
      * @return UserPrincipal
      */
@@ -57,7 +59,7 @@ public class UserPrincipal implements UserDetails {
                 new SimpleGrantedAuthority(role.getRoleName())
         ).collect(Collectors.toList());
         UserPrincipal userPrincipal = new UserPrincipal(
-                user.getUserId(),
+                user.getId(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities

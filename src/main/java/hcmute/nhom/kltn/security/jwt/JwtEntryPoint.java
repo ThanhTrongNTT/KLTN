@@ -28,10 +28,11 @@ public class JwtEntryPoint extends AbstractMessage implements AuthenticationEntr
 
     /**
      * Commence.
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse
+     *
+     * @param request       HttpServletRequest
+     * @param response      HttpServletResponse
      * @param authException AuthenticationException
-     * @throws IOException IOException
+     * @throws IOException      IOException
      * @throws ServletException ServletException
      */
     @Override

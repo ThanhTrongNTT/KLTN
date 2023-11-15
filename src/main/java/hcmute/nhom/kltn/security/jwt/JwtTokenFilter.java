@@ -33,26 +33,26 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String token =getJwt(request);
-            if(token!=null && jwtProvider.validateToken(token)){
+            String token = getJwt(request);
+            if (token != null && jwtProvider.validateToken(token)) {
                 String username = jwtProvider.getUsernameFromJWT(token);
                 UserPrincipal userDetails = (UserPrincipal) customUserDetailService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,null,userDetails.getAuthorities()
+                        userDetails, null, userDetails.getAuthorities()
                 );
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-        } catch (Exception e){
-            logger.error("Can't set user authentication -> Message {}",e);
+        } catch (Exception e) {
+            logger.error("Can't set user authentication -> Message {}", e);
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
-    private String getJwt(HttpServletRequest request){
+    private String getJwt(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
-        if(authHeader!=null && authHeader.startsWith("Bearer")){
-            return authHeader.replace("Bearer","");
+        if (authHeader != null && authHeader.startsWith("Bearer")) {
+            return authHeader.replace("Bearer", "");
         }
         return null;
     }

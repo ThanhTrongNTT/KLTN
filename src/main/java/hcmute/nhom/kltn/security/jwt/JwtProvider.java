@@ -39,24 +39,31 @@ public class JwtProvider {
     @Value("${app.jwtRefreshExpirationInMs}")
     private int jwtRefreshExpirationInMs;
 
+    /**
+     * createToken.
+     * @param authentication authentication
+     * @return JwtAuthenticationResponse
+     */
     public JwtAuthenticationResponse createToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
         Date expiryRefreshDate = new Date(now.getTime() + jwtRefreshExpirationInMs);
         Predicate<GrantedAuthority> filter = item -> item.getAuthority().equals("ADMIN");
-        Collection<GrantedAuthority> roles = userPrincipal.getAuthorities().stream().filter(filter).collect(Collectors.toList());
+        Collection<GrantedAuthority> roles =
+                userPrincipal.getAuthorities().stream().filter(filter).collect(Collectors.toList());
         Boolean admin = false;
         if (roles.size() > 0) {
             admin = true;
         }
         String accessToken = Jwts.builder().setSubject(userPrincipal.getUsername())
-                .claim("admin",admin)
+                .claim("admin", admin)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
         String refreshToken = Jwts.builder().setSubject(userPrincipal.getUsername())
+                .claim("admin", admin)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryRefreshDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -69,6 +76,11 @@ public class JwtProvider {
         return username;
     }
 
+    /**
+     * validateToken.
+     * @param authToken authToken
+     * @return boolean
+     */
     public boolean validateToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);

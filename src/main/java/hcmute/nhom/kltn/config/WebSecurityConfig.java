@@ -1,6 +1,6 @@
 package hcmute.nhom.kltn.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,14 +28,18 @@ import hcmute.nhom.kltn.security.principal.CustomUserDetailService;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private CustomUserDetailService customUserDetailsService;
-    @Autowired
-    private JwtEntryPoint jwtEntryPoint;
+    private final CustomUserDetailService customUserDetailsService;
+    private final JwtEntryPoint jwtEntryPoint;
 
+    /**
+     * JwtTokenFilter.
+     *
+     * @return JwtTokenFilter
+     */
     @Bean
-    public JwtTokenFilter JwtTokenFilter() {
+    public JwtTokenFilter jwtTokenFilter() {
         return new JwtTokenFilter();
     }
 
@@ -68,12 +72,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/v1/auth/**").permitAll()
                 .antMatchers("/api/v1/home/**").permitAll()
+                .antMatchers("/api/v1/posts/**").permitAll()
+                .antMatchers("/api/v1/post/**").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling()
                 .authenticationEntryPoint(jwtEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //Tất cả các request khác đều được phải xác thực trước khi truy cập
+                //Tất cả các request khác đều được phải xác thực trước khi truy cập
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // Thêm một lớp Filter kiểm tra jwt
-        http.addFilterBefore(JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

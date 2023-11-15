@@ -11,5 +11,11 @@ import hcmute.nhom.kltn.model.Address;
  * @author : ThanhTrong
  **/
 public interface AddressService extends AbstractService<AddressDTO, Address> {
-    Page<AddressDTO> searchAddressList(AddressDTO addressDTO, Pageable pageable);
+    /**
+     * searchAddressList.
+     * @param addressDTO : addressDTO
+     * @param pageable  : pageable
+     * @return Page<AddressDTO>
+     */
+    Page<AddressDTO> getAddressListPageable(AddressDTO addressDTO, Pageable pageable);
 }

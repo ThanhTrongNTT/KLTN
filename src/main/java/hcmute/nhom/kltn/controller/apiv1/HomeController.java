@@ -22,6 +22,7 @@ public class HomeController extends AbstractMessage {
 
     /**
      * Home controller.
+     *
      * @param request HttpServletRequest
      * @return String
      */

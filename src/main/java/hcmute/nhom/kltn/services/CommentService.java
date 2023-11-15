@@ -26,11 +26,10 @@ public interface CommentService extends AbstractService<CommentDTO, Comment> {
     /**
      * likeComment.
      * @param commentId commentId
-     * @param postId postId
      * @param userName userName
      * @return Map<String, String>
      */
-    Map<String, Boolean> likeComment(String commentId, String postId, String userName);
+    Map<String, Boolean> likeComment(String commentId, String userName);
 
     /**
      * getCommentByPost.

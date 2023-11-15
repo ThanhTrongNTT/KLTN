@@ -14,7 +14,6 @@ import hcmute.nhom.kltn.model.Address;
  * @function_id:
  * @version:
  **/
-@Repository
 public interface AddressRepository extends AbstractRepository<Address, UUID> {
     @Query(value = "SELECT * FROM address WHERE address_id = ?1", nativeQuery = true)
     List<AddressDTO> searchAddressList(AddressDTO addressDTO);

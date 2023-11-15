@@ -53,14 +53,14 @@ public class AbstractServiceImpl<R extends JpaRepository<E, UUID>, M extends Abs
         if (getMapper() == null) {
             throw new SystemErrorException("Can not load Mapper");
         }
-        return (D) getMapper().toDto(entity, getCycleAvoidingMappingContext());
+        return getMapper().toDto(entity, getCycleAvoidingMappingContext());
     }
 
     protected E getEntity() throws SystemErrorException {
         if (getMapper() == null) {
             throw new SystemErrorException("Can not load Mapper");
         }
-        return (E) getMapper().toEntity(dto, getCycleAvoidingMappingContext());
+        return getMapper().toEntity(dto, getCycleAvoidingMappingContext());
     }
 
     public void setDTO(D dto) {
@@ -80,7 +80,7 @@ public class AbstractServiceImpl<R extends JpaRepository<E, UUID>, M extends Abs
 
         E item = getMapper().toEntity(dto, getCycleAvoidingMappingContext());
         entity = getRepository().save(item);
-        return (D) getMapper().toDto(entity, getCycleAvoidingMappingContext());
+        return getMapper().toDto(entity, getCycleAvoidingMappingContext());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class AbstractServiceImpl<R extends JpaRepository<E, UUID>, M extends Abs
         if (entity == null) {
             throw new SystemErrorException("Save not success. Entity is null");
         }
-        return (E) getRepository().save(entity);
+        return getRepository().save(entity);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class AbstractServiceImpl<R extends JpaRepository<E, UUID>, M extends Abs
         if (optional.isEmpty()) {
             throw new SystemErrorException("Not found entity with id: " + id);
         }
-        return (D) getMapper().toDto(optional.get(), getCycleAvoidingMappingContext());
+        return getMapper().toDto(optional.get(), getCycleAvoidingMappingContext());
     }
 
     @Override

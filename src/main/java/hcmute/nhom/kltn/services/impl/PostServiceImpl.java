@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import hcmute.nhom.kltn.common.payload.NewPostRequest;
 import hcmute.nhom.kltn.dto.PostDTO;
 import hcmute.nhom.kltn.dto.UserDTO;
+import hcmute.nhom.kltn.exception.NotFoundException;
 import hcmute.nhom.kltn.exception.SystemErrorException;
 import hcmute.nhom.kltn.mapper.PostMapper;
 import hcmute.nhom.kltn.model.Post;
@@ -40,16 +41,16 @@ import hcmute.nhom.kltn.util.Utilities;
 public class PostServiceImpl extends AbstractServiceImpl<PostRepository, PostMapper, PostDTO, Post>
         implements PostService {
     private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
-    private static final String METHOD = "PostService";
+    private static final String SERVICE = "PostService";
     private final PostRepository postRepository;
     private final UserService userService;
 
     /**
      * searchPostList.
      *
-     * @param postDTO
-     * @param pageable
-     * @return
+     * @param postDTO PostDTO
+     * @param pageable Pageable
+     * @return Page<PostDTO>
      */
     @Override
     public Page<PostDTO> searchPost(PostDTO postDTO, Pageable pageable) {
@@ -59,84 +60,99 @@ public class PostServiceImpl extends AbstractServiceImpl<PostRepository, PostMap
     /**
      * getAllPost.
      *
-     * @param pageNo
-     * @param pageSize
-     * @param sortBy
-     * @param sortDir
-     * @return
+     * @param pageNo  Page number
+     * @param pageSize Page size
+     * @param sortBy Sort by
+     * @param sortDir Sort direction
+     * @return Page<PostDTO>
      */
     @Override
     public Page<PostDTO> getAllPost(int pageNo, int pageSize, String sortBy, String sortDir) {
-        logger.info(getMessageStart(METHOD, "GetAllPost"));
-        logger.debug(getMessageInputParam(METHOD, "pageNo", pageNo));
-        logger.debug(getMessageInputParam(METHOD, "pageSize", pageSize));
-        logger.debug(getMessageInputParam(METHOD, "sortBy", sortBy));
-        logger.debug(getMessageInputParam(METHOD, "sortDir", sortDir));
+        logger.info(getMessageStart(SERVICE, "GetAllPost"));
+        logger.debug(getMessageInputParam(SERVICE, "pageNo", pageNo));
+        logger.debug(getMessageInputParam(SERVICE, "pageSize", pageSize));
+        logger.debug(getMessageInputParam(SERVICE, "sortBy", sortBy));
+        logger.debug(getMessageInputParam(SERVICE, "sortDir", sortDir));
         PageRequest pageRequest = Utilities.getPageRequest(pageNo, pageSize, sortBy, sortDir);
         Page<Post> posts = postRepository.findAll(pageRequest);
-        logger.debug(getMessageOutputParam(METHOD, "posts", posts.getTotalElements()));
-        logger.info(getMessageEnd(METHOD, "GetAllPost"));
+        logger.debug(getMessageOutputParam(SERVICE, "posts", posts.getTotalElements()));
+        logger.info(getMessageEnd(SERVICE, "GetAllPost"));
         return posts.map(post -> getMapper().toDto(post, getCycleAvoidingMappingContext()));
     }
 
     @Override
     public Page<PostDTO> getPostByUser(int pageNo, int pageSize, String sortBy, String sortDir, String userName) {
-        logger.info(getMessageStart(METHOD, "GetPostByUser"));
-        logger.debug(getMessageInputParam(METHOD, "pageNo", pageNo));
-        logger.debug(getMessageInputParam(METHOD, "pageSize", pageSize));
-        logger.debug(getMessageInputParam(METHOD, "sortBy", sortBy));
-        logger.debug(getMessageInputParam(METHOD, "sortDir", sortDir));
+        logger.info(getMessageStart(SERVICE, "GetPostByUser"));
+        logger.debug(getMessageInputParam(SERVICE, "pageNo", pageNo));
+        logger.debug(getMessageInputParam(SERVICE, "pageSize", pageSize));
+        logger.debug(getMessageInputParam(SERVICE, "sortBy", sortBy));
+        logger.debug(getMessageInputParam(SERVICE, "sortDir", sortDir));
         PageRequest pageRequest = Utilities.getPageRequest(pageNo, pageSize, sortBy, sortDir);
         List<Post> posts = postRepository.getPostsByUser(userName);
         PageImpl<Post> page = new PageImpl<>(posts, pageRequest, posts.size());
-        logger.debug(getMessageOutputParam(METHOD, "posts", posts.size()));
-        logger.info(getMessageEnd(METHOD, "GetPostByUser"));
+        logger.debug(getMessageOutputParam(SERVICE, "posts", posts.size()));
+        logger.info(getMessageEnd(SERVICE, "GetPostByUser"));
         return page.map(post -> getMapper().toDto(post, getCycleAvoidingMappingContext()));
     }
 
     @Override
     public PostDTO createPost(NewPostRequest newPostRequest) {
-        logger.info(getMessageStart(METHOD, "CreatePost"));
-        logger.debug(getMessageInputParam(METHOD, "newPostRequest", newPostRequest));
-        UserDTO user = userService.findByEmail(newPostRequest.getUserName());
-        newPostRequest.getPostDTO().setAuthor(user);
-        Post post = getMapper().toEntity(newPostRequest.getPostDTO(), getCycleAvoidingMappingContext());
-        post = postRepository.save(post);
-        logger.debug(getMessageOutputParam(METHOD, "post", post));
-        logger.info(getMessageEnd(METHOD, "CreatePost"));
-        return getMapper().toDto(post, getCycleAvoidingMappingContext());
+        String method = "CreatePost";
+        logger.info(getMessageStart(SERVICE, method));
+        logger.debug(getMessageInputParam(SERVICE, method, newPostRequest));
+        try {
+            UserDTO user = userService.findByEmail(newPostRequest.getUserName());
+            newPostRequest.getPostDTO().setAuthor(user);
+            Post post = getMapper().toEntity(newPostRequest.getPostDTO(), getCycleAvoidingMappingContext());
+            post = postRepository.save(post);
+            logger.debug(getMessageOutputParam(SERVICE, "post", post));
+            logger.info(getMessageEnd(SERVICE, method));
+            return getMapper().toDto(post, getCycleAvoidingMappingContext());
+        } catch (SystemErrorException e) {
+            String message = "Create Failed";
+            logger.error("Create Failed: {}", message);
+            logger.info(getMessageEnd(SERVICE, method));
+            throw new SystemErrorException(message);
+        } catch (NotFoundException e) {
+            String message = "User not found";
+            logger.error("User not found: {}", message);
+            logger.info(getMessageEnd(SERVICE, method));
+            throw new NotFoundException(message);
+        }
     }
 
     @Override
     public PostDTO updatePost(UUID id, PostDTO postDTO) {
-        logger.info(getMessageStart(METHOD, "UpdatePost"));
-        logger.debug(getMessageInputParam(METHOD, "id", id));
-        logger.debug(getMessageInputParam(METHOD, "postDTO", postDTO));
+        String method = "UpdatePost";
+        logger.info(getMessageStart(SERVICE, method));
+        logger.debug(getMessageInputParam(SERVICE, "id", id));
+        logger.debug(getMessageInputParam(SERVICE, "postDTO", postDTO));
         Post post = postRepository.findById(id).orElse(null);
         if (post != null) {
             post = getMapper().toEntity(postDTO, getCycleAvoidingMappingContext());
             post = postRepository.save(post);
-            logger.debug(getMessageOutputParam(METHOD, "post", post));
-            logger.info(getMessageEnd(METHOD, "UpdatePost"));
+            logger.debug(getMessageOutputParam(SERVICE, "post", post));
+            logger.info(getMessageEnd(SERVICE, method));
             return getMapper().toDto(post, getCycleAvoidingMappingContext());
         } else {
             String message = "Update Failed";
             logger.error("Update Failed: {}", message);
-            logger.info(getMessageEnd(METHOD, "UpdatePost"));
+            logger.info(getMessageEnd(SERVICE, method));
             throw new SystemErrorException(message);
         }
     }
 
     @Override
     public Boolean deletePost(UUID id, String userName) {
-        logger.info(getMessageStart(METHOD, "DeletePost"));
-        logger.debug(getMessageInputParam(METHOD, "id", id));
+        String method = "DeletePost";
+        logger.info(getMessageStart(SERVICE, method));
+        logger.debug(getMessageInputParam(SERVICE, "id", id));
         try {
             Post post = postRepository.findById(id).orElse(null);
             if (post != null && Objects.equals(post.getAuthor().getUserName(), userName)) {
                 postRepository.delete(post);
-                logger.debug(getMessageOutputParam(METHOD, "post", "Delete successfully!"));
-                logger.info(getMessageEnd(METHOD, "DeletePost"));
+                logger.debug(getMessageOutputParam(SERVICE, "result", "Delete successfully!"));
+                logger.info(getMessageEnd(SERVICE, method));
                 return true;
             } else {
                 String message = "Delete Failed";
@@ -144,34 +160,37 @@ public class PostServiceImpl extends AbstractServiceImpl<PostRepository, PostMap
                 throw new SystemErrorException(message);
             }
         } catch (SystemErrorException e) {
-            logger.error("{}", e.getMessage());
-            logger.info(getMessageEnd(METHOD, "DeletePost"));
-            throw new SystemErrorException(e.getMessage());
+            String message = "Delete Failed";
+            logger.error("{}", message);
+            logger.info(getMessageEnd(SERVICE, method));
+            throw new SystemErrorException(message);
         }
     }
 
     @Override
     public PostDTO getPostByUserAndId(UUID id, String userName) {
-        logger.info(getMessageStart(METHOD, "GetPostByUserAndId"));
-        logger.debug(getMessageInputParam(METHOD, "id", id));
-        logger.debug(getMessageInputParam(METHOD, "userName", userName));
+        String method = "GetPostByUserAndId";
+        logger.info(getMessageStart(SERVICE, method));
+        logger.debug(getMessageInputParam(SERVICE, "id", id));
+        logger.debug(getMessageInputParam(SERVICE, "userName", userName));
         Post post = postRepository.getPostsByUserAndId(id, userName).orElse(null);
         if (Objects.isNull(post)) {
             String message = "Get Post Failed";
             logger.error(message);
-            logger.info(getMessageEnd(METHOD, "GetPostByUserAndId"));
+            logger.info(getMessageEnd(SERVICE, method));
             throw new SystemErrorException(message);
         } else {
-            logger.debug(getMessageOutputParam(METHOD, "post", post));
-            logger.info(getMessageEnd(METHOD, "GetPostByUserAndId"));
+            logger.debug(getMessageOutputParam(SERVICE, "post", post));
+            logger.info(getMessageEnd(SERVICE, method));
             return getMapper().toDto(post, getCycleAvoidingMappingContext());
         }
     }
 
     @Override
     public List<PostDTO> getFriendPosts(String userName) {
-        logger.info(getMessageStart(METHOD, "GetFriendPosts"));
-        logger.debug(getMessageInputParam(METHOD, "userName", userName));
+        String method = "GetFriendPosts";
+        logger.info(getMessageStart(SERVICE, method));
+        logger.debug(getMessageInputParam(SERVICE, "userName", userName));
         List<Post> output = new ArrayList<>();
         try {
             UserDTO userDTO = userService.findByUserName(userName);
@@ -180,22 +199,24 @@ public class PostServiceImpl extends AbstractServiceImpl<PostRepository, PostMap
                 output.addAll(posts);
             }
             output.sort(Comparator.comparing(Post::getId));
-            logger.debug(getMessageOutputParam(METHOD, "output", output.size()));
-            logger.info(getMessageEnd(METHOD, "GetFriendPosts"));
+            logger.debug(getMessageOutputParam(SERVICE, "output", output.size()));
+            logger.info(getMessageEnd(SERVICE, method));
             return output.stream().map(post ->
                     getMapper().toDto(post, getCycleAvoidingMappingContext())).collect(Collectors.toList());
         } catch (SystemErrorException e) {
-            logger.error("{}", e.getMessage());
-            logger.info(getMessageEnd(METHOD, "GetFriendPosts"));
-            throw new SystemErrorException(e.getMessage());
+            String message = "Get Friend Posts Failed";
+            logger.error("{}", message);
+            logger.info(getMessageEnd(SERVICE, method));
+            throw new SystemErrorException(message);
         }
     }
 
     @Override
     public Map<String, Boolean> likePost(UUID id, String userName) {
-        logger.info(getMessageStart(METHOD, "LikePost"));
-        logger.debug(getMessageInputParam(METHOD, "id", id));
-        logger.debug(getMessageInputParam(METHOD, "userName", userName));
+        String method = "LikePost";
+        logger.info(getMessageStart(SERVICE, method));
+        logger.debug(getMessageInputParam(SERVICE, "id", id));
+        logger.debug(getMessageInputParam(SERVICE, "userName", userName));
         Map<String, Boolean> output = new HashMap<>();
         output.put("like", null);
         output.put("unlike", null);
@@ -213,8 +234,8 @@ public class PostServiceImpl extends AbstractServiceImpl<PostRepository, PostMap
                 }
                 post.setLikedByUsers(likes);
                 postRepository.save(post);
-                logger.debug(getMessageOutputParam(METHOD, "output", output));
-                logger.info(getMessageEnd(METHOD, "LikePost"));
+                logger.debug(getMessageOutputParam(SERVICE, "output", output));
+                logger.info(getMessageEnd(SERVICE, method));
                 return output;
             } else {
                 String message = "Like Failed";
@@ -222,9 +243,10 @@ public class PostServiceImpl extends AbstractServiceImpl<PostRepository, PostMap
                 throw new SystemErrorException(message);
             }
         } catch (SystemErrorException e) {
-            logger.error("{}", e.getMessage());
-            logger.info(getMessageEnd(METHOD, "LikePost"));
-            throw new SystemErrorException(e.getMessage());
+            String message = "Like Failed";
+            logger.error("{}", message);
+            logger.info(getMessageEnd(SERVICE, method));
+            throw new SystemErrorException(message);
         }
     }
 }

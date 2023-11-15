@@ -6,13 +6,10 @@ import hcmute.nhom.kltn.dto.AddressDTO;
 import hcmute.nhom.kltn.model.Address;
 
 /**
- * Create by: IntelliJ IDEA
+ * Create by: IntelliJ IDEA.
  *
  * @author : ThanhTrong
- * @mailto : ntt.thanhtrong@gmail.com
- * @created : 6/5/2023, Monday
- * @filename : AddressService
  **/
-public interface AddressService extends AbstractService<AddressDTO, Address>{
+public interface AddressService extends AbstractService<AddressDTO, Address> {
     Page<AddressDTO> searchAddressList(AddressDTO addressDTO, Pageable pageable);
 }

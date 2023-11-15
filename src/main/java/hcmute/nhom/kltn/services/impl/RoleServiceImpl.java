@@ -1,9 +1,9 @@
 package hcmute.nhom.kltn.services.impl;
 
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import hcmute.nhom.kltn.dto.RoleDTO;
 import hcmute.nhom.kltn.mapper.RoleMapper;
@@ -19,12 +19,12 @@ import hcmute.nhom.kltn.services.RoleService;
  * @version:
  **/
 @Service
+@RequiredArgsConstructor
 public class RoleServiceImpl extends AbstractServiceImpl<RoleRepository, RoleMapper, RoleDTO, Role>
         implements RoleService {
     private static final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
     private static final String SERVICE_NAME = "RoleServiceImpl";
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     public RoleDTO findByRoleName(String roleName) {

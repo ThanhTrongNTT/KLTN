@@ -37,6 +37,7 @@ public class AbstractMessage implements MessageSourceAware {
 
     /**
      * Get message from message source.
+     *
      * @param code message code
      * @param args message arguments
      * @return message
@@ -52,20 +53,21 @@ public class AbstractMessage implements MessageSourceAware {
     }
 
     public String getMessageStart(String blNo, String method) {
-        return getMessage("common.start.method", new String[] {blNo, method});
+        return getMessage("common.start.method", new String[]{blNo, method});
     }
 
     public String getMessageEnd(String blNo, String method) {
-        return getMessage("common.end.method", new String[] {blNo, method});
+        return getMessage("common.end.method", new String[]{blNo, method});
     }
 
     public String getMessageInputParam(String blNo, String param, Object value) {
-        return getMessage("common.input.parameter", new String[] {blNo, param, Utilities.parseString(value)});
+        return getMessage("common.input.parameter", new String[]{blNo, param, Utilities.parseString(value)});
     }
 
     /**
      * Get message output parameter.
-     * @param blNo business logic number
+     *
+     * @param blNo  business logic number
      * @param param parameter name
      * @param value parameter value
      * @return
@@ -78,6 +80,6 @@ public class AbstractMessage implements MessageSourceAware {
                 value = Utilities.formatOutputMap(value);
             }
         }
-        return getMessage("common.output.parameter", new String[] {blNo, param, Utilities.parseString(value)});
+        return getMessage("common.output.parameter", new String[]{blNo, param, Utilities.parseString(value)});
     }
 }

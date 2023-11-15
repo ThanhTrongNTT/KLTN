@@ -12,5 +12,5 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @version:
  **/
 @NoRepositoryBean
-public interface AbstractRepository<E, I extends Serializable> extends JpaRepository<E, I> {
+public interface AbstractRepository<E, ID extends Serializable> extends JpaRepository<E, ID> {
 }

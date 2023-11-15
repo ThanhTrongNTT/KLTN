@@ -4,21 +4,21 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import hcmute.nhom.kltn.dto.RoleDTO;
+import hcmute.nhom.kltn.dto.FriendDTO;
 import hcmute.nhom.kltn.mapper.helper.CycleAvoidingMappingContext;
-import hcmute.nhom.kltn.model.Role;
+import hcmute.nhom.kltn.model.Friend;
 
 /**
- * Class RoleMapper.
+ * Class FriendMapper.
  *
  * @author: ThanhTrong
  * @function_id:
  * @version:
  **/
 @Mapper(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
-public interface RoleMapper extends AbstractMapper<RoleDTO, Role> {
-    RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
+public interface FriendMapper extends AbstractMapper<FriendDTO, Friend> {
+    FriendMapper INSTANCE = Mappers.getMapper(FriendMapper.class);
 
-    @Mapping(target = "roleName")
-    RoleDTO toDto(Role entity, @Context CycleAvoidingMappingContext context);
+    @Mapping(target = "user")
+    FriendDTO toDto(Friend entity, @Context CycleAvoidingMappingContext context);
 }

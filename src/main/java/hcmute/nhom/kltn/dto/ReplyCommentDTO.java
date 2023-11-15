@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Class AddressDTO.
+ * Class ReplyCommentDTO.
  *
  * @author: ThanhTrong
  * @function_id:
@@ -21,14 +21,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddressDTO extends AbstractNonAuditDTO {
+public class ReplyCommentDTO extends AbstractNonAuditDTO {
     private static final long serialVersionUID = 1L;
-
     private UUID id;
-    private String street;
-    private String district;
-    private String city;
-    private String country;
-    private String postalCode;
-    private Boolean removalFlag;
+    private CommentDTO comment;
+    private UserDTO author;
+    private String content;
+    private String image;
+    private String video;
+    private Integer likeStatus;
+    private Integer removalFlag;
 }

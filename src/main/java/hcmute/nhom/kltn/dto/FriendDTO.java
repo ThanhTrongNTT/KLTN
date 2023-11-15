@@ -7,9 +7,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import hcmute.nhom.kltn.enums.FriendshipStatus;
 
 /**
- * Class AddressDTO.
+ * Class FriendDTO.
  *
  * @author: ThanhTrong
  * @function_id:
@@ -21,14 +22,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddressDTO extends AbstractNonAuditDTO {
+public class FriendDTO extends AbstractNonAuditDTO {
     private static final long serialVersionUID = 1L;
-
     private UUID id;
-    private String street;
-    private String district;
-    private String city;
-    private String country;
-    private String postalCode;
+    private UserDTO user;
+    private UserDTO friend;
+    private FriendshipStatus status;
     private Boolean removalFlag;
 }

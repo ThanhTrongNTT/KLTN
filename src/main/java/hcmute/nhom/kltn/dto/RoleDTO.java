@@ -2,11 +2,11 @@ package hcmute.nhom.kltn.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Set;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import hcmute.nhom.kltn.model.User;
 
 /**
  * Class RoleDTO.
@@ -23,9 +23,10 @@ import hcmute.nhom.kltn.model.User;
 public class RoleDTO extends AbstractNonAuditDTO {
     private static final long serialVersionUID = 1L;
 
+    private UUID id;
     private String roleName;
     private Integer adminFlag;
-    private Set<User> users;
+    private Set<UserDTO> users;
     private Boolean removalFlag;
 }
 

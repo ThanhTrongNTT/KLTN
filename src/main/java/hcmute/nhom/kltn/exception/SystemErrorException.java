@@ -27,6 +27,7 @@ public class SystemErrorException extends BaseException {
 
     /**
      * Check start system error message.
+     *
      * @param message String
      * @return boolean
      */

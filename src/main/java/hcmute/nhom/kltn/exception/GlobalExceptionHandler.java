@@ -40,7 +40,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
      * Handle exception.
-     * @param ex     Exception
+     *
+     * @param ex Exception
      * @return ResponseEntity<Object>
      */
     @ExceptionHandler({UnauthorizationException.class})
@@ -54,6 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
      * Handle exception.
+     *
      * @param ex Exception
      * @return ResponseEntity<Object>
      */

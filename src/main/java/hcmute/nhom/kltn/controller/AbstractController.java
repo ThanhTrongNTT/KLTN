@@ -12,6 +12,6 @@ import hcmute.nhom.kltn.common.AbstractMessage;
  * @version:
  **/
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/")
 public class AbstractController extends AbstractMessage {
 }

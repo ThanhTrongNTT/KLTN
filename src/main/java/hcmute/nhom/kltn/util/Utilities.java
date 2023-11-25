@@ -9,9 +9,12 @@ import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
+import hcmute.nhom.kltn.common.payload.ListResponse;
+import hcmute.nhom.kltn.common.payload.PagingResponseCustom;
 
 /**
  * Class Utilities.
@@ -131,5 +134,38 @@ public final class Utilities {
             logger.info("getIpAdressByHeader - END");
             return ip;
         }
+    }
+
+    /**
+     * Create Paging Response.
+     * @param page Page
+     * @param <T> T
+     * @return PagingResponseCustom<T>
+     */
+    public static <T> PagingResponseCustom<T> createPagingResponse(Page<T> page) {
+        PagingResponseCustom<T> pagingDataCustom = new PagingResponseCustom<>();
+        pagingDataCustom.setContent(page.getContent());
+        pagingDataCustom.setFirst(page.isFirst());
+        pagingDataCustom.setLast(page.isLast());
+        pagingDataCustom.setTotalPages(page.getTotalPages());
+        pagingDataCustom.setTotalElements(page.getTotalElements());
+        pagingDataCustom.setSize(page.getSize());
+        pagingDataCustom.setNumberOfElements(page.getNumberOfElements());
+        pagingDataCustom.setEmpty(page.isEmpty());
+        return pagingDataCustom;
+    }
+
+    /**
+     * Create List Response.
+     * @param list List
+     * @param <T> T
+     * @return ListResponse<T>
+     */
+    public static <T> ListResponse<T> createListResponse(List<T> list) {
+        ListResponse<T> listResponse = new ListResponse<>();
+        listResponse.setContent(list);
+        listResponse.setTotalElements(list.size());
+        listResponse.setEmpty(list.isEmpty());
+        return listResponse;
     }
 }

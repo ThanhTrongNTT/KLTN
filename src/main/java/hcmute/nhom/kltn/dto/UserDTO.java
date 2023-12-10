@@ -26,26 +26,24 @@ import hcmute.nhom.kltn.model.Role;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDTO extends AbstractNonAuditDTO {
+public class UserDTO extends AbstractDTO {
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
+    private String id;
     @NotNull
     @Email
     private String email;
     @NotNull
+    @JsonIgnore
     private String password;
     private String userName;
     private Boolean isActive;
     private UserProfileDTO userProfile;
-    private AddressDTO address;
     @JsonIgnore
     private Set<Role> roles;
-    private List<CommentDTO> comments;
-    private List<PostDTO> posts;
+    @JsonIgnore
     private List<PostDTO> likedPosts;
+    @JsonIgnore
     private List<CommentDTO> likedComments;
-    private Set<UserDTO> friends;
-    private List<ReplyCommentDTO> replies;
     private Boolean removalFlag;
 }

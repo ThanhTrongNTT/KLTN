@@ -30,7 +30,7 @@ import hcmute.nhom.kltn.services.AbstractService;
  **/
 @Getter
 @Setter
-public class AbstractServiceImpl<R extends JpaRepository<E, UUID>, M extends AbstractMapper<D, E>,
+public class AbstractServiceImpl<R extends JpaRepository<E, String>, M extends AbstractMapper<D, E>,
         D extends AbstractNonAuditDTO, E extends AbstractModel>
         extends AbstractMessage
         implements AbstractService<D, E>, MessageSourceAware {
@@ -109,7 +109,7 @@ public class AbstractServiceImpl<R extends JpaRepository<E, UUID>, M extends Abs
     }
 
     @Override
-    public D findById(UUID id) throws SystemErrorException {
+    public D findById(String id) throws SystemErrorException {
         Optional<E> optional = getRepository().findById(id);
         if (optional.isEmpty()) {
             throw new SystemErrorException("Not found entity with id: " + id);
@@ -118,7 +118,7 @@ public class AbstractServiceImpl<R extends JpaRepository<E, UUID>, M extends Abs
     }
 
     @Override
-    public void delete(UUID id) throws SystemErrorException {
+    public void delete(String id) throws SystemErrorException {
         try {
             getRepository().deleteById(id);
         } catch (Exception e) {

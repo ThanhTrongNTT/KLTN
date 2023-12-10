@@ -12,7 +12,7 @@ import hcmute.nhom.kltn.model.Comment;
  * @function_id:
  * @version:
  **/
-public interface CommentRepository extends AbstractRepository<Comment, UUID> {
-    @Query(value = "SELECT * FROM T_COMMENT WHERE post_id = :postId", nativeQuery = true)
+public interface CommentRepository extends AbstractRepository<Comment, String> {
+    @Query(value = "SELECT * FROM T_COMMENT WHERE post_id = :postId AND removal_flag = 0", nativeQuery = true)
     List<Comment> getCommentsByPostId(UUID postId);
 }

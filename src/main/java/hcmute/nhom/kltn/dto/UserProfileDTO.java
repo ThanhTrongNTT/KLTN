@@ -1,5 +1,6 @@
 package hcmute.nhom.kltn.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Date;
 import java.util.UUID;
@@ -23,16 +24,19 @@ import hcmute.nhom.kltn.enums.GenderType;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserProfileDTO extends AbstractNonAuditDTO {
+public class UserProfileDTO extends AbstractDTO {
     private static final long serialVersionUID = 1L;
-    private UUID id;
+    private String id;
     private String lastName;
     private String firstName;
     private String phoneNumber;
     private Date birthDay;
-    private String avatar;
+    private MediaFileDTO avatar;
+    private MediaFileDTO cover;
     private GenderType gender;
     private String description;
+    private AddressDTO address;
+    @JsonIgnore
     private UserDTO user;
-    private Boolean removalFlag;
+    private Boolean removalFlag = false;
 }

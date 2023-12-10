@@ -31,7 +31,7 @@ public class RoleServiceImpl extends AbstractServiceImpl<RoleRepository, RoleMap
     public RoleDTO findByRoleName(String roleName) {
         String method = "FindByRoleName";
         logger.info(getMessageStart(SERVICE_NAME, method));
-        Role role = roleRepository.findByName(roleName).orElse(null);
+        Role role = getRepository().findByName(roleName).orElse(null);
         if (Objects.isNull(role)) {
             String message = "Role not found";
             logger.error(message);
@@ -47,7 +47,7 @@ public class RoleServiceImpl extends AbstractServiceImpl<RoleRepository, RoleMap
     public Role findByName(String roleName) {
         String method = "FindByName";
         logger.info(getMessageStart(SERVICE_NAME, method));
-        Role role = roleRepository.findByName(roleName).orElse(null);
+        Role role = getRepository().findByName(roleName).orElse(null);
         if (Objects.isNull(role)) {
             String message = "Role not found";
             logger.error(message);
@@ -64,4 +64,8 @@ public class RoleServiceImpl extends AbstractServiceImpl<RoleRepository, RoleMap
         return RoleMapper.INSTANCE;
     }
 
+    @Override
+    public RoleRepository getRepository() {
+        return roleRepository;
+    }
 }

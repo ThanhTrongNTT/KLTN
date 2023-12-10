@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import hcmute.nhom.kltn.common.payload.ApiResponse;
-import hcmute.nhom.kltn.common.payload.NewPostRequest;
+import hcmute.nhom.kltn.common.payload.ListResponse;
+import hcmute.nhom.kltn.common.payload.PagingResponseCustom;
 import hcmute.nhom.kltn.controller.AbstractController;
 import hcmute.nhom.kltn.dto.PostDTO;
 import hcmute.nhom.kltn.services.PostService;
 import hcmute.nhom.kltn.util.Constants;
 import hcmute.nhom.kltn.util.SessionConstants;
-import hcmute.nhom.kltn.util.Utilities;
 
 /**
  * Class PostController.
@@ -52,8 +52,8 @@ public class PostController extends AbstractController {
      * @param sortDir            String
      * @return ResponseEntity<ApiResponse<Page<PostDTO>>>
      */
-    @GetMapping("/posts")
-    public ResponseEntity<ApiResponse<Page<PostDTO>>> getAllPost(
+    @GetMapping("posts/paging")
+    public ResponseEntity<ApiResponse<PagingResponseCustom<PostDTO>>> getAllPostPaging(
             HttpServletRequest httpServletRequest,
             @RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false)
             int pageNo,
@@ -64,11 +64,30 @@ public class PostController extends AbstractController {
             @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false)
             String sortDir
     ) {
+        String messageStart = getMessageStart(httpServletRequest.getRequestURL().toString(), "getAllPostPaging");
+        String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "getAllPostPaging");
+        logger.info("{}", messageStart);
+        // Execute getAllPost
+        PagingResponseCustom<PostDTO> posts = postService.getAllPostPaging(pageNo, pageSize, sortBy, sortDir);
+        logger.info("{}", messageEnd);
+        return ResponseEntity.ok().body(new ApiResponse<>(posts,
+                "Get all post paging successfully"));
+    }
+
+    /**
+     * Get all post.
+     * @param httpServletRequest HttpServletRequest
+     * @return ResponseEntity<ApiResponse<List<PostDTO>>>
+     */
+    @GetMapping("posts")
+    public ResponseEntity<ApiResponse<ListResponse<PostDTO>>> getAllPost(
+            HttpServletRequest httpServletRequest
+    ) {
         String messageStart = getMessageStart(httpServletRequest.getRequestURL().toString(), "getAllPost");
         String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "getAllPost");
         logger.info("{}", messageStart);
         // Execute getAllPost
-        Page<PostDTO> posts = postService.getAllPost(pageNo, pageSize, sortBy, sortDir);
+        ListResponse<PostDTO> posts = postService.getAllPost();
         logger.info("{}", messageEnd);
         return ResponseEntity.ok().body(new ApiResponse<>(posts, "Get all post successfully"));
     }
@@ -77,31 +96,18 @@ public class PostController extends AbstractController {
      * Search post.
      *
      * @param httpServletRequest HttpServletRequest
-     * @param pageNo             int
-     * @param pageSize           int
-     * @param sortBy             String
-     * @param sortDir            String
      * @return ResponseEntity<ApiResponse<Page<PostDTO>>>
      */
-    @GetMapping("/posts/search")
-    public ResponseEntity<ApiResponse<Page<PostDTO>>> searchPost(
+    @GetMapping("posts/search")
+    public ResponseEntity<ApiResponse<ListResponse<PostDTO>>> searchPost(
             HttpServletRequest httpServletRequest,
-            @RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false)
-            int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false)
-            int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false)
-            String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false)
-            String sortDir,
             @RequestBody PostDTO postDTO
     ) {
         String messageStart = getMessageStart(httpServletRequest.getRequestURL().toString(), "searchPost");
         String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "searchPost");
         logger.info("{}", messageStart);
         // Execute searchPost
-        Page<PostDTO> posts = postService.searchPost(postDTO,
-                Utilities.getPageRequest(pageNo, pageSize, sortBy, sortDir));
+        ListResponse<PostDTO> posts = postService.searchPost(postDTO);
         logger.info("{}", messageEnd);
         return ResponseEntity.ok().body(new ApiResponse<>(posts, "Search post successfully"));
     }
@@ -116,8 +122,8 @@ public class PostController extends AbstractController {
      * @param sortDir            String
      * @return ResponseEntity<ApiResponse<Page<PostDTO>>>
      */
-    @GetMapping("{userName}/posts")
-    public ResponseEntity<ApiResponse<Page<PostDTO>>> getPostsByUser(
+    @GetMapping("posts/{userName}")
+    public ResponseEntity<ApiResponse<PagingResponseCustom<PostDTO>>> getPostsByUser(
             HttpServletRequest httpServletRequest,
             @PathVariable("userName") String userName,
             @RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false)
@@ -133,7 +139,8 @@ public class PostController extends AbstractController {
         String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "getPostsByUser");
         logger.info("{}", messageStart);
         // Execute getAllPost
-        Page<PostDTO> posts = postService.getPostByUser(pageNo, pageSize, sortBy, sortDir, userName);
+        PagingResponseCustom<PostDTO> posts =
+                postService.getPostByUserPaging(pageNo, pageSize, sortBy, sortDir, userName);
         logger.info("{}", messageEnd);
         return ResponseEntity.ok().body(new ApiResponse<>(posts, "Get all post successfully"));
     }
@@ -145,7 +152,7 @@ public class PostController extends AbstractController {
      * @param userName         String
      * @return ResponseEntity<ApiResponse<PostDTO>>
      */
-    @GetMapping("{userName}/posts/{id}")
+    @GetMapping("posts/{userName}/{id}")
     public ResponseEntity<ApiResponse<PostDTO>> getPostByUser(
             HttpServletRequest httpServletRequest,
             @PathVariable("id") String id,
@@ -155,7 +162,7 @@ public class PostController extends AbstractController {
         String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "getPostByUser");
         // Execute get one post by user
         logger.info("{}", messageStart);
-        PostDTO postDTO = postService.getPostByUserAndId(UUID.fromString(id), userName);
+        PostDTO postDTO = postService.getPostByUserAndId(id, userName);
         logger.info("{}", messageEnd);
         return ResponseEntity.ok().body(new ApiResponse<>(postDTO, "Get post successfully"));
     }
@@ -163,20 +170,32 @@ public class PostController extends AbstractController {
     /**
      * Create post.
      * @param httpServletRequest HttpServletRequest
-     * @param newPostRequest           NewPostRequest
+     * @param postDTO           PostDTO
      * @return ResponseEntity<ApiResponse<PostDTO>>
      */
-    @PostMapping("/post")
+    @PostMapping("posts/create")
     public ResponseEntity<ApiResponse<PostDTO>> createPost(
-            HttpServletRequest httpServletRequest, @RequestBody NewPostRequest newPostRequest
+            HttpServletRequest httpServletRequest,
+            HttpSession session,
+            @RequestBody PostDTO postDTO
     ) {
         String messageStart = getMessageStart(httpServletRequest.getRequestURL().toString(), "createPost");
         String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "createPost");
         logger.info("{}", messageStart);
-        // Execute getAllPost
-        PostDTO savePost = postService.createPost(newPostRequest);
-        logger.info("{}", messageEnd);
-        return ResponseEntity.ok().body(new ApiResponse<>(savePost, "Create post successfully"));
+        try {
+            String email = session.getAttribute(SessionConstants.USER_EMAIL).toString();
+            // Execute getAllPost
+            PostDTO savePost = postService.createPost(postDTO, email);
+            logger.info("{}", messageEnd);
+            return ResponseEntity.ok().body(new ApiResponse<>(savePost, "Create post successfully"));
+        } catch (Exception e) {
+            if (!Objects.isNull(e.getMessage())) {
+                logger.info("{}", messageEnd);
+                return new ResponseEntity<>(new ApiResponse<>(false, null, e.getMessage()), HttpStatus.BAD_REQUEST);
+            }
+            logger.info("{}", messageEnd);
+            return new ResponseEntity<>(new ApiResponse<>(false, null, "Create Post Failed!"), HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
@@ -185,7 +204,7 @@ public class PostController extends AbstractController {
      * @param postDTO          PostDTO
      * @return ResponseEntity<ApiResponse<PostDTO>>
      */
-    @PutMapping("/{userName}/post/{id}")
+    @PutMapping("post/{userName}/{id}")
     public ResponseEntity<ApiResponse<PostDTO>> updatePost(
             HttpServletRequest httpServletRequest,
             HttpSession session,
@@ -198,12 +217,13 @@ public class PostController extends AbstractController {
         if (Objects.equals(userName, session.getAttribute(SessionConstants.USER_NAME))) {
             logger.info("{}", messageStart);
             // Execute getAllPost
-            PostDTO updatePost = postService.updatePost(UUID.fromString(id), postDTO);
+            PostDTO updatePost = postService.updatePost(id, postDTO);
             logger.info("{}", messageEnd);
             return ResponseEntity.ok().body(new ApiResponse<>(updatePost, "Update post successfully"));
         } else {
             logger.info("{}", messageEnd);
-            return ResponseEntity.ok().body(new ApiResponse<>(null, "Update post failed"));
+            return new ResponseEntity<>(new ApiResponse<>(false, null, "Update post failed"),
+                    HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -213,7 +233,7 @@ public class PostController extends AbstractController {
      * @param id                UUID
      * @return ResponseEntity<ApiResponse<Boolean>>
      */
-    @DeleteMapping("/post/{id}")
+    @DeleteMapping("posts/{id}")
     public ResponseEntity<ApiResponse<Boolean>> deletePost(
             HttpServletRequest httpServletRequest,
             HttpSession session,
@@ -223,9 +243,10 @@ public class PostController extends AbstractController {
         logger.info("{}", messageStart);
         // Execute getAllPost
         String userName = session.getAttribute(SessionConstants.USER_NAME).toString();
-        postService.deletePost(UUID.fromString(id), userName);
+        Boolean isDelete = postService.deletePost(id, userName);
+        String message = Boolean.TRUE.equals(isDelete) ? "Delete post successfully" : "Delete post failed";
         logger.info("{}", messageEnd);
-        return null;
+        return ResponseEntity.ok().body(new ApiResponse<>(isDelete, message));
     }
 
     /**
@@ -253,10 +274,10 @@ public class PostController extends AbstractController {
      * Like post.
      * @param httpServletRequest HttpServletRequest
      * @param session          HttpSession
-     * @param id              UUID
+     * @param id              String
      * @return ResponseEntity<ApiResponse<?>>
      */
-    @PostMapping("/post/{id}/like")
+    @PostMapping("posts/{id}/like")
     public ResponseEntity<ApiResponse<Boolean>> likePost(
             HttpServletRequest httpServletRequest,
             HttpSession session,
@@ -269,7 +290,7 @@ public class PostController extends AbstractController {
         logger.info("{}", messageStart);
         // Execute like post
         String userName = session.getAttribute(SessionConstants.USER_NAME).toString();
-        Map<String, Boolean> result = postService.likePost(UUID.fromString(id), userName);
+        Map<String, Boolean> result = postService.likePost(id, userName);
         String messageLike = Objects.nonNull(result.get(like)) && Boolean.TRUE.equals(result.get(like))
                 ? "Like post successfully" : null;
         String messageUnlike = Objects.nonNull(result.get(unlike)) && Boolean.TRUE.equals(result.get(unlike))
@@ -278,5 +299,25 @@ public class PostController extends AbstractController {
         return ResponseEntity.ok()
                 .body(new ApiResponse<>(Objects.nonNull(result.get(like)) ? result.get(like) : result.get(unlike),
                         Objects.nonNull(messageLike) ? messageLike : messageUnlike));
+    }
+
+    /**
+     * Get post by id.
+     * @param httpServletRequest HttpServletRequest
+     * @param id               String
+     * @return ResponseEntity<ApiResponse<PostDTO>>
+     */
+    @GetMapping("posts/{id}")
+    public ResponseEntity<ApiResponse<PostDTO>> getPostById(
+            HttpServletRequest httpServletRequest,
+            @PathVariable("id") String id
+    ) {
+        String messageStart = getMessageStart(httpServletRequest.getRequestURL().toString(), "getPostById");
+        String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "getPostById");
+        logger.info("{}", messageStart);
+        // Execute get post by id
+        PostDTO postDTO = postService.getPostById(id);
+        logger.info("{}", messageEnd);
+        return ResponseEntity.ok().body(new ApiResponse<>(postDTO, "Get post successfully"));
     }
 }

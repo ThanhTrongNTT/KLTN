@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,9 +39,8 @@ public class Address extends AbstractAuditModel implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Type(type = "uuid-char")
     @Column(name = "ID", nullable = false)
-    private UUID id;
+    private String id;
     @Column(name = "STREET")
     private String street;
     @Column(name = "DISTRICT")
@@ -50,6 +51,9 @@ public class Address extends AbstractAuditModel implements Serializable {
     private String country;
     @Column(name = "POSTAL_CODE")
     private String postalCode;
+    @OneToOne(mappedBy = "address")
+    @JoinColumn(name = "USER_PROFILE_ID")
+    private UserProfile userProfile;
     @Column(name = "REMOVAL_FLAG", nullable = false, length = 1)
     private Boolean removalFlag = false;
 }

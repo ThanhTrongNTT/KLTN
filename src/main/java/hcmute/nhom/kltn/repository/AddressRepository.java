@@ -2,8 +2,8 @@ package hcmute.nhom.kltn.repository;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import hcmute.nhom.kltn.dto.AddressDTO;
 import hcmute.nhom.kltn.model.Address;
 
@@ -14,7 +14,7 @@ import hcmute.nhom.kltn.model.Address;
  * @function_id:
  * @version:
  **/
-public interface AddressRepository extends AbstractRepository<Address, UUID> {
-    @Query(value = "SELECT * FROM address WHERE address_id = ?1", nativeQuery = true)
+public interface AddressRepository extends AbstractRepository<Address, String> {
+    @Query(value = "SELECT * FROM address WHERE id = :addressDTO AND removal_flag = 0", nativeQuery = true)
     List<AddressDTO> searchAddressList(AddressDTO addressDTO);
 }

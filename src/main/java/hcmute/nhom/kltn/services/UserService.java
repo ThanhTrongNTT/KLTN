@@ -1,6 +1,8 @@
 package hcmute.nhom.kltn.services;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
+import hcmute.nhom.kltn.common.payload.ListResponse;
 import hcmute.nhom.kltn.common.payload.LoginRequest;
 import hcmute.nhom.kltn.dto.UserDTO;
 import hcmute.nhom.kltn.model.User;
@@ -23,10 +25,10 @@ public interface UserService extends AbstractService<UserDTO, User> {
 
     /**
      * saveWithAddress.
-     * @param userDTO userDTO
+     * @param userDTO UserDTO
      * @return UserDTO
      */
-    UserDTO saveWithAddress(UserDTO userDTO);
+    UserDTO saveUserProfile(UserDTO userDTO, String email);
 
     /**
      * findByEmail.
@@ -52,7 +54,7 @@ public interface UserService extends AbstractService<UserDTO, User> {
      * @param sortDir sortDir
      * @return Page<UserDTO>
      */
-    Page<UserDTO> getAllUser(int pageNo, int pageSize, String sortBy, String sortDir);
+    Page<UserDTO> getAllUserPaging(int pageNo, int pageSize, String sortBy, String sortDir);
 
     /**
      * activeUser.
@@ -74,4 +76,47 @@ public interface UserService extends AbstractService<UserDTO, User> {
      * @return Boolean
      */
     Boolean registerUser(LoginRequest registerRequest);
+
+    /**
+     * searchUser.
+     * @param userName String
+     * @return List<UserDTO>
+     */
+    ListResponse<UserDTO> searchUser(String userName);
+
+    /**
+     * getAllUserName.
+     * @return List<String>
+     */
+    List<String> getAllUserName();
+
+    /**
+     * updateAvatar.
+     * @param email String
+     * @param userDTO UserDTO
+     * @return UserDTO
+     */
+    UserDTO updateAvatar(UserDTO userDTO, String email);
+
+    /**
+     * deleteAvatar.
+     * @param email String
+     * @return Boolean
+     */
+    Boolean deleteAvatar(String email);
+
+    /**
+     * updateCover.
+     * @param email String
+     * @param userDTO UserDTO
+     * @return UserDTO
+     */
+    UserDTO updateCover(UserDTO userDTO, String email);
+
+    /**
+     * deleteCover.
+     * @param email String
+     * @return Boolean
+     */
+    Boolean deleteCover(String email);
 }

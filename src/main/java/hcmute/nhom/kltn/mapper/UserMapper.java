@@ -19,6 +19,6 @@ import hcmute.nhom.kltn.model.User;
 public interface UserMapper extends AbstractMapper<UserDTO, User> {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(target = "password")
+    @Mapping(target = "email")
     UserDTO toDto(User entity, @Context CycleAvoidingMappingContext context);
 }

@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,9 +41,8 @@ public class Comment extends AbstractAuditModel implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Type(type = "uuid-char")
     @Column(name = "ID", nullable = false)
-    private UUID id;
+    private String id;
     @ManyToOne
     @JoinColumn(name = "POST_ID")
     private Post post;
@@ -51,10 +51,12 @@ public class Comment extends AbstractAuditModel implements Serializable {
     private User author;
     @Column(name = "CONTENT")
     private String content;
-    @Column(name = "IMAGE")
-    private String image;
-    @Column(name = "VIDEO")
-    private String video;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "IMAGE_ID")
+    private MediaFile image;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "VIDEO_ID")
+    private MediaFile video;
     @Column(name = "LIKE_STATUS")
     private LikeStatusType likeStatus;
     @ManyToMany(mappedBy = "likedComments") // Nhiều người dùng thích comment này

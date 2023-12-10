@@ -10,5 +10,5 @@ import hcmute.nhom.kltn.model.ReplyComment;
  * @function_id:
  * @version:
  **/
-public interface ReplyCommentRepository extends AbstractRepository<ReplyComment, UUID> {
+public interface ReplyCommentRepository extends AbstractRepository<ReplyComment, String> {
 }

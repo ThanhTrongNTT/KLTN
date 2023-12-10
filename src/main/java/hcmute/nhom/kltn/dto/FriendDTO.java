@@ -22,11 +22,11 @@ import hcmute.nhom.kltn.enums.FriendshipStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class FriendDTO extends AbstractNonAuditDTO {
+public class FriendDTO extends AbstractDTO {
     private static final long serialVersionUID = 1L;
-    private UUID id;
+    private String id;
     private UserDTO user;
-    private UserDTO friend;
+    private UserDTO friendUser;
     private FriendshipStatus status;
-    private Boolean removalFlag;
+    private Boolean removalFlag = false;
 }

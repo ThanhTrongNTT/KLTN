@@ -16,7 +16,7 @@ import hcmute.nhom.kltn.model.Address;
  **/
 @Mapper(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
 public interface AddressMapper extends AbstractMapper<AddressDTO, Address> {
-    AbstractMapper<AddressDTO, Address> INSTANCE = Mappers.getMapper(AddressMapper.class);
+    AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
 
 
     AddressDTO toDto(Address entity, @Context CycleAvoidingMappingContext context);

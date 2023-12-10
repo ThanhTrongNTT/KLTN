@@ -3,13 +3,13 @@ package hcmute.nhom.kltn.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import hcmute.nhom.kltn.enums.MediaFileType;
 
 /**
- * Class ReplyCommentDTO.
+ * Class MediaFileDTO.
  *
  * @author: ThanhTrong
  * @function_id:
@@ -17,18 +17,15 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ReplyCommentDTO extends AbstractDTO {
+public class MediaFileDTO extends AbstractNonAuditDTO {
     private static final long serialVersionUID = 1L;
+
     private String id;
-    private CommentDTO comment;
-    private UserDTO author;
-    private String content;
-    private MediaFileDTO image;
-    private MediaFileDTO video;
-    private Integer likeStatus;
+    private String name;
+    private MediaFileType type;
+    private String url;
     private Boolean removalFlag = false;
 }

@@ -3,7 +3,6 @@ package hcmute.nhom.kltn.security.principal;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +18,7 @@ import hcmute.nhom.kltn.model.User;
  * Filename : UserPrinciple
  */
 public class UserPrincipal implements UserDetails {
-    private UUID id;
+    private String id;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
@@ -41,7 +40,7 @@ public class UserPrincipal implements UserDetails {
      * @param password
      * @param authorities
      */
-    public UserPrincipal(UUID id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(String id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
         this.password = password;

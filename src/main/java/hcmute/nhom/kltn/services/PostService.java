@@ -3,9 +3,9 @@ package hcmute.nhom.kltn.services;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import hcmute.nhom.kltn.common.payload.NewPostRequest;
+import hcmute.nhom.kltn.common.payload.ListResponse;
+import hcmute.nhom.kltn.common.payload.PagingResponseCustom;
+import hcmute.nhom.kltn.dto.MediaFileDTO;
 import hcmute.nhom.kltn.dto.PostDTO;
 import hcmute.nhom.kltn.model.Post;
 
@@ -21,10 +21,16 @@ public interface PostService extends AbstractService<PostDTO, Post> {
      * searchPostList.
      *
      * @param postDTO PostDTO
-     * @param pageable Pageable
      * @return Page<PostDTO>
      */
-    Page<PostDTO> searchPost(PostDTO postDTO, Pageable pageable);
+    ListResponse<PostDTO> searchPost(PostDTO postDTO);
+
+    /**
+     * getAllPost.
+     *
+     * @return Page<PostDTO>
+     */
+    ListResponse<PostDTO> getAllPost();
 
     /**
      * getAllPost.
@@ -35,7 +41,7 @@ public interface PostService extends AbstractService<PostDTO, Post> {
      * @param sortDir Sort direction
      * @return Page<PostDTO>
      */
-    Page<PostDTO> getAllPost(int pageNo, int pageSize, String sortBy, String sortDir);
+    PagingResponseCustom<PostDTO> getAllPostPaging(int pageNo, int pageSize, String sortBy, String sortDir);
 
     /**
      * Get post by user.
@@ -46,14 +52,15 @@ public interface PostService extends AbstractService<PostDTO, Post> {
      * @param userName User name
      * @return Page<PostDTO>
      */
-    Page<PostDTO> getPostByUser(int pageNo, int pageSize, String sortBy, String sortDir, String userName);
+    PagingResponseCustom<PostDTO> getPostByUserPaging(int pageNo, int pageSize, String sortBy,
+                                                      String sortDir, String userName);
 
     /**
      * Create post.
-     * @param newPostRequest NewPostRequest
+     * @param postDTO PostDTO
      * @return  PostDTO
      */
-    PostDTO createPost(NewPostRequest newPostRequest);
+    PostDTO createPost(PostDTO postDTO, String email);
 
     /**
      *  Update post.
@@ -61,14 +68,14 @@ public interface PostService extends AbstractService<PostDTO, Post> {
      * @param postDTO PostDTO
      * @return PostDTO
      */
-    PostDTO updatePost(UUID id, PostDTO postDTO);
+    PostDTO updatePost(String id, PostDTO postDTO);
 
     /**
      * Delete post.
      * @param id UUID
      * @return Boolean
      */
-    Boolean deletePost(UUID id, String userName);
+    Boolean deletePost(String id, String userName);
 
     /**
      * Get post by user and id.
@@ -76,7 +83,7 @@ public interface PostService extends AbstractService<PostDTO, Post> {
      * @param userName  String
      * @return PostDTO
      */
-    PostDTO getPostByUserAndId(UUID id, String userName);
+    PostDTO getPostByUserAndId(String id, String userName);
 
     /**
      * Get friend posts.
@@ -91,5 +98,19 @@ public interface PostService extends AbstractService<PostDTO, Post> {
      * @param userName String
      * @return Boolean
      */
-    Map<String, Boolean> likePost(UUID id, String userName);
+    Map<String, Boolean> likePost(String id, String userName);
+
+    /**
+     * Get post by id.
+     * @param id String
+     * @return PostDTO
+     */
+    PostDTO getPostById(String id);
+
+    /**
+     * Get all media by userName.
+     * @param userName String
+     * @return ListResponse<MediaFileDTO>
+     */
+    ListResponse<MediaFileDTO> getAllMediaByUserName(String userName);
 }

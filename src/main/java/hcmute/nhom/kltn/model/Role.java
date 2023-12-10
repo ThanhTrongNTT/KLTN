@@ -38,9 +38,8 @@ public class Role extends AbstractAuditModel implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Type(type = "uuid-char")
     @Column(name = "ID", nullable = false)
-    private UUID roleId;
+    private String roleId;
     @Column(name = "ROLE_NAME")
     private String roleName;
     @Column(name = "ADMIN_FLAG", length = 1, nullable = false)

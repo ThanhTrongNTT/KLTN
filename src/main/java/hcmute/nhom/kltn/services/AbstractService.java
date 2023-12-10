@@ -1,7 +1,6 @@
 package hcmute.nhom.kltn.services;
 
 import java.util.List;
-import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import hcmute.nhom.kltn.dto.AbstractNonAuditDTO;
 import hcmute.nhom.kltn.model.AbstractModel;
@@ -40,13 +39,13 @@ public interface AbstractService<D extends AbstractNonAuditDTO, E extends Abstra
      * @param id : id
      * @return D
      */
-    D findById(UUID id);
+    D findById(String id);
 
     /**
      * Save.
      * @param id : id
      */
-    void delete(UUID id);
+    void delete(String id);
 
     /**
      * Save.

@@ -25,6 +25,18 @@ public class ApiResponse<T> {
         this.message = message;
     }
 
+    /**
+     * Constructor.
+     * @param result true/false
+     * @param data  data
+     * @param message message
+     */
+    public ApiResponse(Boolean result, T data, String message) {
+        this.data = data;
+        this.message = message;
+        this.result = result;
+    }
+
     public ApiResponse(String message) {
         this.message = message;
     }

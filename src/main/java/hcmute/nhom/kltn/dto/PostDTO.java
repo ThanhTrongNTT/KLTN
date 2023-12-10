@@ -23,18 +23,16 @@ import hcmute.nhom.kltn.enums.LikeStatusType;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PostDTO extends AbstractNonAuditDTO {
+public class PostDTO extends AbstractDTO {
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
-    private String title;
+    private String id;
     private String content;
-    private String image;
-    private String video;
+    private MediaFileDTO image;
+    private MediaFileDTO video;
     private String category;
     private UserDTO author;
-    private List<CommentDTO> comments;
     private List<UserDTO> likedByUsers;
     private LikeStatusType likeStatus;
-    private Boolean removalFlag;
+    private Boolean removalFlag = false;
 }

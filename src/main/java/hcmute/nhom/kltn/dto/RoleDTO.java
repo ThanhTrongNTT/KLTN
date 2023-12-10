@@ -20,13 +20,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RoleDTO extends AbstractNonAuditDTO {
+public class RoleDTO extends AbstractDTO {
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
+    private String id;
     private String roleName;
     private Integer adminFlag;
     private Set<UserDTO> users;
-    private Boolean removalFlag;
+    private Boolean removalFlag = false;
 }
 

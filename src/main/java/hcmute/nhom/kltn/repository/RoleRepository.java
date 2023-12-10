@@ -14,7 +14,7 @@ import hcmute.nhom.kltn.model.Role;
  * @version:
  **/
 @Repository
-public interface RoleRepository extends AbstractRepository<Role, UUID> {
-    @Query(value = "SELECT * FROM T_ROLE r WHERE r.ROLE_NAME = :name", nativeQuery = true)
+public interface RoleRepository extends AbstractRepository<Role, String> {
+    @Query(value = "SELECT * FROM T_ROLE r WHERE r.ROLE_NAME = :name AND removal_flag = 0", nativeQuery = true)
     Optional<Role> findByName(String name);
 }

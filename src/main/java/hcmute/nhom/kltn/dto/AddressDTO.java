@@ -21,14 +21,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddressDTO extends AbstractNonAuditDTO {
+public class AddressDTO extends AbstractDTO {
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
+    private String id;
     private String street;
     private String district;
     private String city;
     private String country;
     private String postalCode;
-    private Boolean removalFlag;
+    private Boolean removalFlag = false;
 }

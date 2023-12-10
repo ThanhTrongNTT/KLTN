@@ -1,14 +1,12 @@
 package hcmute.nhom.kltn.enums;
 
 /**
- * Class FriendshipStatus.
+ * Class MediaFileType.
  *
  * @author: ThanhTrong
  * @function_id:
  * @version:
  **/
-public enum FriendshipStatus {
-    PENDING,
-    ACCEPTED,
-    BLOCKED
+public enum MediaFileType {
+    VIDEO, IMAGE, AUDIO
 }

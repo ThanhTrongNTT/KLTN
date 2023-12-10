@@ -112,7 +112,7 @@ public class AuthenticationController extends AbstractController {
                     "Login successfully!!"));
         } catch (Exception e) {
             logger.error("{}", e.getMessage());
-            return new ResponseEntity<>(new ApiResponse<>(null, e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse<>(false, null, e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 

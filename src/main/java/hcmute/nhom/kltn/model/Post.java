@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,17 +42,16 @@ public class Post extends AbstractAuditModel implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Type(type = "uuid-char")
     @Column(name = "ID", nullable = false)
-    private UUID id;
-    @Column(name = "TITLE")
-    private String title;
+    private String id;
     @Column(name = "CONTENT")
     private String content;
-    @Column(name = "IMAGE")
-    private String image;
-    @Column(name = "VIDEO")
-    private String video;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "IMAGE_ID")
+    private MediaFile image;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "VIDEO_ID")
+    private MediaFile video;
     @Column(name = "CATEGORY")
     private String category;
     @ManyToOne

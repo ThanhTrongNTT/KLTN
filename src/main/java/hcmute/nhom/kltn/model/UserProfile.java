@@ -5,12 +5,13 @@ import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +30,6 @@ import hcmute.nhom.kltn.enums.GenderType;
 @Table(name = "T_USER_PROFILE")
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProfile extends AbstractAuditModel implements Serializable {
@@ -38,9 +38,8 @@ public class UserProfile extends AbstractAuditModel implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Type(type = "uuid-char")
     @Column(name = "ID", nullable = false)
-    private UUID id;
+    private String id;
 
     @Column(name = "LAST_NAME")
     private String lastName;
@@ -54,8 +53,13 @@ public class UserProfile extends AbstractAuditModel implements Serializable {
     @Column(name = "BIRTH_DAY")
     private Date birthDay;
 
-    @Column(name = "AVATAR")
-    private String avatar;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "AVATAR_ID")
+    private MediaFile avatar;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "COVER_ID")
+    private MediaFile cover;
 
     @Column(name = "GENDER")
     private GenderType gender;
@@ -63,7 +67,12 @@ public class UserProfile extends AbstractAuditModel implements Serializable {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ADDRESS_ID")
+    private Address address;
+
     @OneToOne(mappedBy = "userProfile")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @Column(name = "REMOVAL_FLAG", nullable = false, length = 1)

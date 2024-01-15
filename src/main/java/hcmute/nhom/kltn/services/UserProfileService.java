@@ -23,7 +23,7 @@ public interface UserProfileService extends AbstractService<UserProfileDTO, User
      * @param userProfileDTO userProfileDTO
      * @return UserProfileDTO
      */
-    UserProfileDTO updateProfile(UserProfileDTO userProfileDTO, String email);
+    UserProfileDTO updateProfile(UserProfileDTO userProfileDTO);
 
     /**
      * deleteAvatar.

@@ -1,6 +1,5 @@
 package hcmute.nhom.kltn.controller.apiv1;
 
-import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -324,6 +323,33 @@ public class UserController extends AbstractController {
                     .body(new ApiResponse<>(result, "Delete cover successfully"));
         } catch (Exception e) {
             String message = "Delete cover failed";
+            logger.error("{}", message);
+            return new ResponseEntity<>(new ApiResponse<>(false, null, message), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Check active user.
+     * @param httpServletRequest HttpServletRequest
+     * @param email String
+     * @return
+     */
+    @GetMapping("user/check-active/{email}")
+    public ResponseEntity<ApiResponse<Boolean>> checkActiveUser(
+            HttpServletRequest httpServletRequest,
+            @PathVariable("email") String email
+    ) {
+        String messageStart = getMessageStart(httpServletRequest.getRequestURL().toString(), "checkActiveUser");
+        String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "checkActiveUser");
+        logger.info("{}", messageStart);
+        try {
+            // Execute deleteCover
+            Boolean result = userService.checkActiveUser(email);
+            logger.info("{}", messageEnd);
+            return ResponseEntity.ok()
+                    .body(new ApiResponse<>(result, "Check active user successfully"));
+        } catch (Exception e) {
+            String message = "Check active user failed";
             logger.error("{}", message);
             return new ResponseEntity<>(new ApiResponse<>(false, null, message), HttpStatus.INTERNAL_SERVER_ERROR);
         }

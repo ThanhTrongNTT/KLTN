@@ -3,7 +3,6 @@ package hcmute.nhom.kltn.services;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import hcmute.nhom.kltn.common.payload.ListResponse;
-import hcmute.nhom.kltn.common.payload.LoginRequest;
 import hcmute.nhom.kltn.dto.UserDTO;
 import hcmute.nhom.kltn.model.User;
 
@@ -72,10 +71,10 @@ public interface UserService extends AbstractService<UserDTO, User> {
 
     /**
      * registerUser.
-     * @param registerRequest registerRequest
+     * @param userDTO UserDTO
      * @return Boolean
      */
-    Boolean registerUser(LoginRequest registerRequest);
+    Boolean registerUser(UserDTO userDTO);
 
     /**
      * searchUser.
@@ -119,4 +118,11 @@ public interface UserService extends AbstractService<UserDTO, User> {
      * @return Boolean
      */
     Boolean deleteCover(String email);
+
+    /**
+     * checkActiveUser.
+     * @param email String
+     * @return Boolean
+     */
+    Boolean checkActiveUser(String email);
 }

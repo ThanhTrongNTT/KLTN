@@ -1,6 +1,5 @@
 package hcmute.nhom.kltn.repository;
 
-import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
 import hcmute.nhom.kltn.model.UserProfile;
 

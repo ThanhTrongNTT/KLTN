@@ -1,7 +1,6 @@
 package hcmute.nhom.kltn.services;
 
 import java.util.List;
-import java.util.UUID;
 import hcmute.nhom.kltn.common.payload.ListResponse;
 import hcmute.nhom.kltn.dto.FriendDTO;
 import hcmute.nhom.kltn.model.Friend;

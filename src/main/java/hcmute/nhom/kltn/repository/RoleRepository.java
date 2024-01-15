@@ -1,7 +1,6 @@
 package hcmute.nhom.kltn.repository;
 
 import java.util.Optional;
-import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import hcmute.nhom.kltn.model.Role;

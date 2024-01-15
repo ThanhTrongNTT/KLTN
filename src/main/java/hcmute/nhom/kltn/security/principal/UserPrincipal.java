@@ -21,6 +21,8 @@ public class UserPrincipal implements UserDetails {
     private String id;
     private String email;
     private String password;
+
+    private Boolean isActive;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override
@@ -40,11 +42,13 @@ public class UserPrincipal implements UserDetails {
      * @param password
      * @param authorities
      */
-    public UserPrincipal(String id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(String id, String email, String password, Collection<? extends GrantedAuthority> authorities,
+                         Boolean isActive) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.isActive = isActive;
     }
 
     /**
@@ -61,7 +65,8 @@ public class UserPrincipal implements UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities
+                authorities,
+                user.getIsActive()
         );
         return userPrincipal;
     }
@@ -94,5 +99,9 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Boolean isActive() {
+        return isActive;
     }
 }

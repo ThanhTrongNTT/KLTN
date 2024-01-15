@@ -1,6 +1,5 @@
 package hcmute.nhom.kltn.repository;
 
-import java.util.UUID;
 import hcmute.nhom.kltn.model.ReplyComment;
 
 /**

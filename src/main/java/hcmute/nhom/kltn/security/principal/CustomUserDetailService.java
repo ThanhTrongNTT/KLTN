@@ -18,7 +18,7 @@ import hcmute.nhom.kltn.repository.UserRepository;
 @Service
 public class CustomUserDetailService implements UserDetailsService {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

@@ -51,18 +51,18 @@ public class AuthenticationController extends AbstractController {
      * Register User.
      *
      * @param httpServletRequest HttpServletRequest
-     * @param registerRequest            LoginRequest
+     * @param userDTO            UserDTO
      * @return ResponseEntity<?>
      */
-    @PostMapping("/auth/register")
+    @PostMapping("auth/register")
     public ResponseEntity<ApiResponse<Boolean>> registerUser(
             HttpServletRequest httpServletRequest,
-            @Validated @RequestBody LoginRequest registerRequest) {
+            @RequestBody UserDTO userDTO) {
         String messageStart = getMessageStart(httpServletRequest.getRequestURL().toString(), "registerUser");
         String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "registerUser");
         logger.info("{}", messageStart);
         // Execute RegisterUser
-        Boolean result = userService.registerUser(registerRequest);
+        Boolean result = userService.registerUser(userDTO);
         logger.info("{}", messageEnd);
         return ResponseEntity.ok().body(new ApiResponse<>(result, "User registered successfully"));
     }
@@ -74,7 +74,7 @@ public class AuthenticationController extends AbstractController {
      * @param loginRequest       LoginRequest
      * @return ResponseEntity<?>
      */
-    @PostMapping("/auth/login")
+    @PostMapping("auth/login")
     public ResponseEntity<ApiResponse<JwtAuthenticationResponse>> login(
             HttpServletRequest httpServletRequest,
             HttpSession session,
@@ -123,7 +123,7 @@ public class AuthenticationController extends AbstractController {
      * @param forgotPasswordRequest ForgotPasswordRequest
      * @return ResponseEntity<?>
      */
-    @PostMapping("/auth/forgot-password")
+    @PostMapping("auth/forgot-password")
     public ResponseEntity<ApiResponse<String>> forgotPassword(
             HttpServletRequest httpServletRequest,
             @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
@@ -142,7 +142,7 @@ public class AuthenticationController extends AbstractController {
      * @param httpServletRequest HttpServletRequest
      * @return ResponseEntity<?>
      */
-    @PostMapping("/auth/logout")
+    @PostMapping("auth/logout")
     public ResponseEntity<ApiResponse<String>> logout(HttpServletRequest httpServletRequest) {
         String messageStart = getMessageStart(httpServletRequest.getRequestURL().toString(), "logout");
         String messageEnd = getMessageEnd(httpServletRequest.getRequestURL().toString(), "logout");
@@ -154,7 +154,7 @@ public class AuthenticationController extends AbstractController {
         } catch (Exception e) {
             logger.info("The HttpSession has already be invalidated. So no need invalidated");
         }
-        ApiResponse<String> apiResponse = new ApiResponse<>("Logout successfully");
+        ApiResponse<String> apiResponse = new ApiResponse<>("Logout successfully!", "Logout successfully!");
         logger.info("{}", messageEnd);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }

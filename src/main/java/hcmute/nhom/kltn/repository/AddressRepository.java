@@ -1,8 +1,6 @@
 package hcmute.nhom.kltn.repository;
 
 import java.util.List;
-import java.util.UUID;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import hcmute.nhom.kltn.dto.AddressDTO;
 import hcmute.nhom.kltn.model.Address;

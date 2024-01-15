@@ -3,7 +3,6 @@ package hcmute.nhom.kltn.model;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +19,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  * Class User.
@@ -72,12 +70,6 @@ public class User extends AbstractAuditModel implements Serializable {
     )
     private Set<Role> roles;
 
-    // @OneToMany(mappedBy = "author")
-    // private List<Comment> comments = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "author")
-    // private List<Post> posts = new ArrayList<>();
-
     @ManyToMany
     @JoinTable(name = "T_USER_LIKE_POST",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -89,12 +81,6 @@ public class User extends AbstractAuditModel implements Serializable {
             joinColumns = @JoinColumn(name = "USER_ID"),
             inverseJoinColumns = @JoinColumn(name = "POST_ID"))
     private List<Comment> likedComments;
-
-    // @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    // private List<Friend> friends;
-
-    // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    // private List<ReplyComment> replies;
 
     @Column(name = "REMOVAL_FLAG", nullable = false, length = 1)
     private Boolean removalFlag = false;

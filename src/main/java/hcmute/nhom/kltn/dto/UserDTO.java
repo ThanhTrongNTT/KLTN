@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -34,7 +33,6 @@ public class UserDTO extends AbstractDTO {
     @Email
     private String email;
     @NotNull
-    @JsonIgnore
     private String password;
     private String userName;
     private Boolean isActive;
